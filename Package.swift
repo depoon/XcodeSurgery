@@ -5,6 +5,9 @@ import PackageDescription
 
 let package = Package(
     name: "XcodeSurgery",
+    products: [
+        .executable(name: "XcodeSurgery", targets: ["XcodeSurgery"]),
+    ],
     dependencies: [
         .package(url: "https://github.com/apple/swift-argument-parser", from: "0.3.0"),
     ],
