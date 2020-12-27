@@ -76,11 +76,11 @@ class TransplantSimulator: TransplantActionable {
     }
     
     var pathOfWorkingFolder: String {
-        return "\(self.transplantCommand.targetBuildDirectory)/\(self.transplantCommand.sourceTarget)_BACKUP.app"
+        return "\(self.transplantCommand.workingDirectory)/\(self.transplantCommand.sourceTarget)_BACKUP.app"
     }
     
     var pathOfBaseTargetApp: String {
-        return "\(self.transplantCommand.targetBuildDirectory)/\(self.transplantCommand.sourceTarget).app"
+        return "\(self.transplantCommand.workingDirectory)/\(self.transplantCommand.sourceTarget).app"
     }
     
     var pathOfProductApp: String {
