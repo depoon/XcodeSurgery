@@ -23,24 +23,57 @@ Mint can be installed via Homebrew
 brew install mint
 ```
 
-## Steps to Setup XcodeSurgery in your Project
+## 4 Simple Steps to Setup XcodeSurgery in your Project
 1. Create a new app target. We will refer this as the `Destination Target` and the original target as the `Source Target`
+
 2. Copy Build Settings of `Source Target` over to `Destination Target`.
-3. Add Preparation Build Phase for `Source Target`
-4. Add Transplant Build Phase for `Destination Target`
-5. Build the `Source Target`
+
+![Copy Build Settings](docs/CopyBuildSettings.gif)
+
+3. Add Preparation Build Phase for `Source Target` using the following command
 ```sh
 xcodesurgery prepare \
---workingDirectory "${SRCROOT}/surgeryroom" \
+--workingDirectory "<WorkingDirectory>" \
 --targetBuildDirectory ${TARGET_BUILD_DIR} \
 --targetName "${TARGETNAME}"
 ```
-6. Build the `Destination Target`
+4. Add Transplant Build Phase for `Destination Target` using the following command
 ```sh
-xcodesurgery prepare \
---workingDirectory "${SRCROOT}/surgeryroom" \
+xcodesurgery transplant \
+--action ${ACTION} \
 --targetBuildDirectory ${TARGET_BUILD_DIR} \
---targetName "${TARGETNAME}"
+--workingDirectory "<WorkingDirectory>" \
+--sourceTarget "<SourceTargetName>" \
+--destinationTarget ${TARGETNAME} \
+--sdkName ${SDK_NAME}
+
 ```
 
+## To build the variants
+1. Build the `Source Target`
 
+2. Build the `Destination Target`
+
+## Deploying the app variants
+Run the `Destination Target` and observe that you can deploy a clone app of the `Source Target`
+
+You can modify the `Destination Target` build settings with different bundle identifiers, code signing instructions and provisioning profiles to create different build variants.
+
+## xcodesurgery Command Arguments
+### Prepare
+Argument Name | Comments
+------------ | -------------
+`workingDirectory` | Directory where target source app will be copied to
+`targetBuildDirectory` | ${TARGET_BUILD_DIR} environment argument of source target
+`targetName` | ${TARGETNAME} environment argument of source target
+
+### Transplant
+Argument Name | Comments
+------------ | -------------
+`action` | ${ACTION} environment argument of destination target
+`workingDirectory` | Directory where target source app will be copied to
+`targetBuildDirectory` | ${TARGET_BUILD_DIR} environment argument of destination target
+`targetName` | ${TARGETNAME} environment argument of destination target
+`sourceTarget` | Name of the source target
+`destinationTarget` | ${TARGETNAME} environment argument of destination target
+`sdkName` | ${SDK_NAME} environment argument of destination target
