@@ -7,3 +7,8 @@ struct XcodeSurgery: ParsableCommand {
                                                         XcodeSurgery.Prepare.self])
 }
 
+func printDebug(_ string: String) {
+    #if DEBUG
+        print(string)
+    #endif
+}

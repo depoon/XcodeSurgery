@@ -77,3 +77,4 @@ Argument Name | Comments
 `sourceTarget` | Name of the source target
 `destinationTarget` | ${TARGETNAME} environment argument of destination target
 `sdkName` | ${SDK_NAME} environment argument of destination target
+`debugInformationFormat` | ${DEBUG_INFORMATION_FORMAT} environment argument of destination target

@@ -12,6 +12,7 @@ protocol TransplantActionable {
 
 extension TransplantActionable {
     func cleanFolders() throws {
+        print("----- begin cleanFolders")
         let fileManager = FileManager.default
         if fileManager.fileExists(atPath: self.pathOfWorkingFolder) {
             try fileManager.removeItem(atPath: self.pathOfWorkingFolder)
@@ -19,13 +20,16 @@ extension TransplantActionable {
     }
     
     func createWorkingFolder() throws {
+        print("----- begin createWorkingFolder")
         let fileManager = FileManager.default
         try fileManager.copyItem(atPath: pathOfBaseTargetApp,
                              toPath: pathOfWorkingFolder)
     }
     
     func removeFiles() throws {
+        print("----- begin removeFiles")
         let filesToRemove = self.transplantCommand.filesToRemove
+        print("filesToRemove: \(filesToRemove)")
         let fileManager = FileManager.default
         try fileManager.removeItem(atPath: "\(self.pathOfWorkingFolder)/Info.plist")
         for fileToRemove in filesToRemove {
@@ -36,6 +40,7 @@ extension TransplantActionable {
     }
     
     func copyFilesToWorkingFolder() throws {
+        print("----- begin copyFilesToWorkingFolder")
         let filesToInject = self.transplantCommand.filesToInject
         let fileManager = FileManager.default
         try fileManager.copyItem(atPath: "\(self.pathOfProductApp)/Info.plist",
@@ -52,6 +57,7 @@ extension TransplantActionable {
     }
 
     func renameBinary() throws {
+        print("----- begin renameBinary")
         let baseTargetBinary = "\(self.pathOfWorkingFolder)/\(self.transplantCommand.sourceTarget)"
         let targetBinary = "\(self.pathOfWorkingFolder)/\(self.transplantCommand.destinationTarget)"
         
@@ -64,6 +70,7 @@ extension TransplantActionable {
     }
     
     func removeSignature() throws {
+        print("----- begin removeSignature")
         let embeddedProvisioning = "\(self.pathOfWorkingFolder)/embedded.mobileprovision"
         let codeSignature = "\(self.pathOfWorkingFolder)/_CodeSignature"
         let pkgInfo = "\(self.pathOfWorkingFolder)/PkgInfo"
@@ -90,6 +97,7 @@ extension TransplantActionable {
     }
     
     func replaceApp() throws {
+        print("----- begin replaceApp")
         let fileManager = FileManager.default
         if fileManager.fileExists(atPath: self.pathOfProductApp) {
             try fileManager.removeItem(atPath: self.pathOfProductApp)
@@ -98,6 +106,12 @@ extension TransplantActionable {
                                  toPath: self.pathOfProductApp)
     }
     
+    func patchDsym() throws {
+        print("----- begin PatchDsym")
+        let dsymPatchingAction = DsymPatchingAction(transplantCommand: self.transplantCommand)
+        try dsymPatchingAction.executeDsymPatch()
+        print("----- end PatchDsym")
+    }
 
     func execute() throws {
         do {
@@ -109,7 +123,8 @@ extension TransplantActionable {
             try self.renameBinary()
             try self.removeSignature()
             try self.replaceApp()
-            print("--- End of \(self) Archive Execution")
+            try self.patchDsym()
+            print("--- End of \(self) Execution")
         }
         catch {
             print("--- Moved failed with error: \(error.localizedDescription)")

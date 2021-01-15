@@ -31,6 +31,7 @@ extension XcodeSurgery {
             try clearDirectory()
             try createDirectory()
             try copyAppToWorkingDirectory()
+            try copyDsymToWorkingDirectory()
 
         }
         
@@ -52,6 +53,18 @@ extension XcodeSurgery {
             let fileManager = FileManager.default
             try fileManager.copyItem(atPath: source,
                                      toPath: destination)
+        }
+        
+        func copyDsymToWorkingDirectory() throws {
+            let fileManager = FileManager.default
+            let sourceDsym = "\(self.targetBuildDirectory)/\(targetName).app.dSYM"
+            let destinationDsym = "\(self.workingDirectory)/\(targetName).app.dSYM"
+            if fileManager.fileExists(atPath: sourceDsym) {
+                try fileManager.copyItem(atPath: sourceDsym,
+                                         toPath: destinationDsym)
+            } else {
+                printDebug("No Dsym to copy")
+            }
         }
     }
 }
