@@ -38,13 +38,24 @@ extension XcodeSurgery {
         @Option(name: .customLong("sdkName"), help: "SDK Name eg. ${SDK_NAME}")
         var sdkName: String
         
-        @Option(name: .customLong("filesToRemove"), parsing: .upToNextOption, help: "Files to remove (separated by spaces)")
+        @Option(name: .customLong("filesToRemove"),
+                parsing: .upToNextOption,
+                help: "Files to remove (separated by spaces)")
         var filesToRemove: [String] = []
         
-        @Option(name: .customLong("filesToInject"), parsing: .upToNextOption, help: "Files to inject (separated by spaces)")
+        @Option(name: .customLong("filesToInject"),
+                parsing: .upToNextOption,
+                help: "Files to inject (separated by spaces)")
         var filesToInject: [String] = []
         
+        @Option(name: [.customLong("debugInformationFormat"),
+                       .customLong("dif")],
+                help: "Debug Information Format eg. ${DEBUG_INFORMATION_FORMAT}")
+        var debugInformationFormat: String?
+        
         func run() throws {
+            printDebug("filesToRemove: \(filesToRemove)")
+            printDebug("filesToInject: \(filesToInject)")
             let actionable = try self.createTransplantActionable()
             try actionable.execute()
         }
