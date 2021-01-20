@@ -10,6 +10,9 @@ Building different build variants using configuration will trigger recompilation
 ## Solution: Create a placeholder target and swap binaries.
 XcodeSurgery aims to eliminate unnecessary recompilation of source codes when building different flavours or variants of an iOS app target.
 
+## Build Time Savings
+![Copy Build Settings](docs/BuildTimeSavings.png)
+
 ## Installing XCodeSurgery
 
 
@@ -78,3 +81,13 @@ Argument Name | Comments
 `destinationTarget` | ${TARGETNAME} environment argument of destination target
 `sdkName` | ${SDK_NAME} environment argument of destination target
 `debugInformationFormat` | ${DEBUG_INFORMATION_FORMAT} environment argument of destination target
+`filesToRemove` | list of files in sourceTarget app to remove
+`filesToInject` | list of files to copy into destinationTarget app
+
+### Frequently Asked Questions
+1. [Does XcodeSurgery has dSYM support?](https://github.com/depoon/XcodeSurgery/tree/master/docs/faq#frequently-asked-questions)
+2. [I am getting errors because my app does not use Scene Delegate](https://github.com/depoon/XcodeSurgery/tree/master/docs/faq#i-am-getting-errors-because-my-app-does-not-use-scene-delegate)
+3. [We are still compiling source codes for each variant](https://github.com/depoon/XcodeSurgery/tree/master/docs/faq#we-are-still-compiling-source-codes-for-each-variant)
+4. [The app variant is not picking up the correct icon](https://github.com/depoon/XcodeSurgery/tree/master/docs/faq#the-app-variant-is-not-picking-up-the-correct-icon)
+5. [Why use XcodeSurgery when you can simply re-sign the app?](https://github.com/depoon/XcodeSurgery/tree/readme-v4/docs/faq#why-use-xcodesurgery-when-you-can-simply-re-sign-the-app)
+

@@ -20,4 +20,9 @@ Yes we are. We merely using the destination target as a placeholder. As there is
 ### The app variant is not picking up the correct icon.
 Xcode requires the `Assets.xcassets` to be available to the destination target before it adds the app icon entries into the Info.plist file. All is required is to select `Assets.xcassets` in the project navigator and select the destination target membership.
 
-
+### Why use XcodeSurgery when you can simply re-sign the app?
+Re-signing the app via `codesign` allows the developers to simply overwrite the app codesigning signature. Here are some advantages to use XcodeSurgery over re-signing
+1. XcodeSurgery encourages you to focus and use xcode build settings and xcconfig files to manage all variant configurations.
+2. With the XcodeSurgery process, you dont need to handle any complexity in codesigning. Leave that job to Xcode.
+3. You still need to build your app variants for the simulator. The XcodeSurgery process handles it within all within Xcode
+4. You can use the Xcode runtime debugger/breakpoint feature. That is not possible when you choose to re-sign the ipa outside the xcodebuild process.
