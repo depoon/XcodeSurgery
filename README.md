@@ -84,10 +84,12 @@ Argument Name | Comments
 `filesToRemove` | list of files in sourceTarget app to remove
 `filesToInject` | list of files to copy into destinationTarget app
 
-### Frequently Asked Questions
+## Frequently Asked Questions
 1. [Does XcodeSurgery has dSYM support?](https://github.com/depoon/XcodeSurgery/tree/master/docs/faq#frequently-asked-questions)
 2. [I am getting errors because my app does not use Scene Delegate](https://github.com/depoon/XcodeSurgery/tree/master/docs/faq#i-am-getting-errors-because-my-app-does-not-use-scene-delegate)
 3. [We are still compiling source codes for each variant](https://github.com/depoon/XcodeSurgery/tree/master/docs/faq#we-are-still-compiling-source-codes-for-each-variant)
 4. [The app variant is not picking up the correct icon](https://github.com/depoon/XcodeSurgery/tree/master/docs/faq#the-app-variant-is-not-picking-up-the-correct-icon)
 5. [Why use XcodeSurgery when you can simply re-sign the app?](https://github.com/depoon/XcodeSurgery/tree/readme-v4/docs/faq#why-use-xcodesurgery-when-you-can-simply-re-sign-the-app)
 
+## Coming Soon
+Support for Extensions. Help raise an issue for one. I welcome contributions to help grow the capabilities of this repository.
