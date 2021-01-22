@@ -28,6 +28,8 @@ brew install mint
 
 ## 4 Simple Steps to Setup XcodeSurgery in your Project
 1. Create a new app target. We will refer this as the `Destination Target` and the original target as the `Source Target`
+![Copy Build Settings](docs/images/CreateNewTarget.gif)
+Do note that you do not need to clone the `Source Target`
 
 2. Copy Build Settings of `Source Target` over to `Destination Target`.
 
