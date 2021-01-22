@@ -1,5 +1,5 @@
 
-![Image of XcodeSurgery](docs/XcodeSurgeryLogo_v2.png)
+![Image of XcodeSurgery](docs/images/XcodeSurgeryLogo_v2.png)
 # XcodeSurgery
 
 XcodeSurgery is a swift XCode build phase CLI tool for copying compiled binaries between iOS app targets. 
@@ -11,7 +11,7 @@ Building different build variants using configuration will trigger recompilation
 XcodeSurgery aims to eliminate unnecessary recompilation of source codes when building different flavours or variants of an iOS app target.
 
 ## Build Time Savings
-![Copy Build Settings](docs/BuildTimeSavings.png)
+![Copy Build Settings](docs/images/BuildTimeSavings.png)
 
 ## Installing XCodeSurgery
 
@@ -31,7 +31,7 @@ brew install mint
 
 2. Copy Build Settings of `Source Target` over to `Destination Target`.
 
-![Copy Build Settings](docs/CopyBuildSettings.gif)
+![Copy Build Settings](docs/images/CopyBuildSettings.gif)
 
 3. Add Preparation Build Phase for `Source Target` using the following command
 ```sh
@@ -85,11 +85,28 @@ Argument Name | Comments
 `filesToInject` | list of files to copy into destinationTarget app
 
 ## Frequently Asked Questions
-1. [Does XcodeSurgery has dSYM support?](https://github.com/depoon/XcodeSurgery/tree/master/docs/faq#frequently-asked-questions)
-2. [I am getting errors because my app does not use Scene Delegate](https://github.com/depoon/XcodeSurgery/tree/master/docs/faq#i-am-getting-errors-because-my-app-does-not-use-scene-delegate)
-3. [We are still compiling source codes for each variant](https://github.com/depoon/XcodeSurgery/tree/master/docs/faq#we-are-still-compiling-source-codes-for-each-variant)
-4. [The app variant is not picking up the correct icon](https://github.com/depoon/XcodeSurgery/tree/master/docs/faq#the-app-variant-is-not-picking-up-the-correct-icon)
-5. [Why use XcodeSurgery when you can simply re-sign the app?](https://github.com/depoon/XcodeSurgery/tree/readme-v4/docs/faq#why-use-xcodesurgery-when-you-can-simply-re-sign-the-app)
+1. [Does XcodeSurgery has dSYM support?](./docs/faq.md#does-xcodesurgery-has-dsym-support)
+2. [I am getting errors because my app does not use Scene Delegate](./docs/faq.md#i-am-getting-errors-because-my-app-does-not-use-scene-delegate)
+3. [We are still compiling source codes for each variant](./docs/faq.md#we-are-still-compiling-source-codes-for-each-variant)
+4. [The app variant is not picking up the correct icon](./docs/faq.md#the-app-variant-is-not-picking-up-the-correct-icon)
+5. [Why use XcodeSurgery when you can simply re-sign the app?](./docs/faq.md#why-use-xcodesurgery-when-you-can-simply-re-sign-the-app)
+
+## How to prepare your projects for XcodeSurgery
+If you are currently using user-defined-settings or preprocessor macros in your project, you may not be able to take advantage of time savings with having just one compile process.
+
+Here's a quick adjustment you can make to prepare your project for XcodeSurgery
+
+#### 1. Adding custom entry in your app target's Info.plist
+![Adding custom entry in your app target's Info.plist](docs/images/ExampleCustomEnvInfo.png)
+Create a new string-value entry in your target's Info.plist file to indiciate which variant you are building.
+
+#### 2. Read custom entry from Info.plist
+Read the custom entry from Info.plist and use the corresponding value to create your variant values for your app.
+```swift
+let env = Bundle.main.infoDictionary?["MY_ENVIRONMENT"] as! String
+```
+
+Do take note that this is trade off between having extra code in your application and improvments on build time. If you encounter any issues or difficulties to integrate XcodeSurgery into your project, do help to raise an issue.
 
 ## Coming Soon
 Support for Extensions. Help raise an issue for one. I welcome contributions to help grow the capabilities of this repository.
