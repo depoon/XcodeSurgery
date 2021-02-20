@@ -5,7 +5,9 @@ struct XcodeSurgery: ParsableCommand {
     static var configuration = CommandConfiguration(subcommands: [
                                                         XcodeSurgery.Transplant.self,
                                                         XcodeSurgery.Prepare.self,
-                                                        XcodeSurgery.Keygen.self])
+                                                        XcodeSurgery.KeyGen.self,
+                                                        XcodeSurgery.Encryption.self,
+                                                        XcodeSurgery.SourceGen.self])
 }
 
 func printDebug(_ string: String) {

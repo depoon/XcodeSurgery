@@ -51,7 +51,7 @@ extension XcodeSurgery {
                                                           toPath: ivOutputFile)
 
                 try variantEncryptionFileManager.saveCipertextToFile(ciphertext: encryptionResult.ciphertext,
-                                                                     toPath: ivOutputFile)
+                                                                     toPath: encryptedOutputFile)
                 print("--- End of Encryption Execution")
             }
             catch {

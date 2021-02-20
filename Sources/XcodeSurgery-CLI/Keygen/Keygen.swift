@@ -11,7 +11,7 @@ import VariantEncryption
 
 extension XcodeSurgery {
 
-    struct Keygen: ParsableCommand {
+    struct KeyGen: ParsableCommand {
 
         @Option(name: [.customLong("outputFile"),
                        .customShort("o")],
@@ -43,7 +43,7 @@ extension XcodeSurgery {
     }
 }
 /*
-extension XcodeSurgery.Keygen {
+extension XcodeSurgery.KeyGen {
     
     private func encryptionTest(encryptionKey: EncryptionKey,
                         decryptionKey: EncryptionKey) throws {
