@@ -14,12 +14,15 @@ public typealias EncryptionIV = [UInt8]
 public class VariantEncryption {
     
     public init() {}
-    
-    public typealias DecryptionInput = EncryptionResult
 
     public struct EncryptionResult {
         public let ciphertext: Data
         public let iv: EncryptionIV
+    }
+    
+    public struct DecryptionInput {
+        let encryptionResult: EncryptionResult
+        let encryptionKey: EncryptionKey
     }
 
     public func encrypt(plainText: Data, key: EncryptionKey) throws -> EncryptionResult {
@@ -30,10 +33,10 @@ public class VariantEncryption {
         return EncryptionResult(ciphertext: encryptedData, iv: iv)
     }
     
-    public func decrypt(result: EncryptionResult, key: EncryptionKey ) throws -> Data {
-        let iv = result.iv
-        let aes = try AES(key: key, blockMode: CBC(iv: iv), padding: .pkcs7)
-        let decryptedBytes = try aes.decrypt(result.ciphertext.bytes)
+    public func decrypt(decryptionInput: DecryptionInput) throws -> Data {
+        let iv = decryptionInput.encryptionResult.iv
+        let aes = try AES(key: decryptionInput.encryptionKey, blockMode: CBC(iv: iv), padding: .pkcs7)
+        let decryptedBytes = try aes.decrypt(decryptionInput.encryptionResult.ciphertext.bytes)
         let decryptedData = Data(decryptedBytes)
         return decryptedData
     }
@@ -58,16 +61,15 @@ public class VariantEncryption {
     public func createDecryptionInput(encryptionKeyFilePath: String,
                                ivFilePath: String,
                                cipherTextFilePath: String) throws -> DecryptionInput {
-        guard let encryptionFileURL = URL(string: cipherTextFilePath) else {
-            fatalError("Unable to load cipherText")
-        }
-        let cipherText = try Data(contentsOf: encryptionFileURL)
+        let ciphertextFileURL: URL = URL(fileURLWithPath: cipherTextFilePath)
+        let cipherText = try Data(contentsOf: ciphertextFileURL)
         
         let variantFileManager = VariantEncryption.FileManager()
         let encryptionIv = try variantFileManager.readIv(filePath: ivFilePath)
         
-        return DecryptionInput(ciphertext: cipherText, iv: encryptionIv)
-        
+        let encryptionKey = try variantFileManager.readKey(filePath: encryptionKeyFilePath)
+        let encryptionResult = EncryptionResult(ciphertext: cipherText, iv: encryptionIv)
+        return DecryptionInput(encryptionResult: encryptionResult, encryptionKey: encryptionKey)
     }
 }
 

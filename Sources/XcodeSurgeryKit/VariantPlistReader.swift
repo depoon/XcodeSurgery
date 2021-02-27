@@ -10,42 +10,42 @@ import VariantEncryption
 
 public class VariantPlistReader: NSObject {
 
-    static let shared = VariantPlistReader()
+    public static let shared = VariantPlistReader()
 
-    var decryptionInput: VariantEncryption.DecryptionInput?
-    var encryptionKey: EncryptionKey?
+    public var decryptionInput: VariantEncryption.DecryptionInput?
 
     var plist: [String: Any]!
     private override init() {}
 
-    func loadPlistIfNeeded() throws {
+    public func loadPlistIfNeeded() {
         if plist != nil {
             return
         }
         guard let decryptionInput = self.decryptionInput else {
             fatalError("Unable to load Config")
         }
-        guard let encryptionKey = self.encryptionKey else {
-            fatalError("Unable to load encryptionKey")
-        }
-        let variantEncryption = VariantEncryption()
-        let decryptedData = try variantEncryption.decrypt(result: decryptionInput, key: encryptionKey)
+        do {
+            let variantEncryption = VariantEncryption()
+            let decryptedData = try variantEncryption.decrypt(decryptionInput: decryptionInput)
 
-        guard let dicFromData =  try? PropertyListSerialization.propertyList(from: decryptedData, options: [], format: nil) else {
+            guard let dicFromData =  try? PropertyListSerialization.propertyList(from: decryptedData, options: [], format: nil) else {
+                fatalError("Unable to load Config")
+            }
+            guard let dictionary = dicFromData as? [String: Any] else {
+                fatalError("Unable to load Config")
+            }
+            self.plist = dictionary
+        } catch {
             fatalError("Unable to load Config")
         }
-        guard let dictionary = dicFromData as? [String: Any] else {
-            fatalError("Unable to load Config")
-        }
-        self.plist = dictionary
     }
 
-    func string(for keys: [String]) throws -> String {
-        try loadPlistIfNeeded()
+    public func string(for keys: [String]) -> String {
+        loadPlistIfNeeded()
         return string(for: self.plist, keys: keys)
     }
 
-    func string(for dictionary: [String: Any], keys: [String]) -> String {
+    public func string(for dictionary: [String: Any], keys: [String]) -> String {
         guard keys.count >= 1 else {
             fatalError("Error Reading Config Dictionary")
         }
@@ -65,12 +65,12 @@ public class VariantPlistReader: NSObject {
         return self.string(for: subDictionary, keys: slicedKeys)
     }
 
-    func bool(for keys: [String]) throws -> Bool {
-        try loadPlistIfNeeded()
+    public func bool(for keys: [String]) -> Bool {
+        loadPlistIfNeeded()
         return bool(for: self.plist, keys: keys)
     }
 
-    func bool(for dictionary: [String: Any], keys: [String]) -> Bool {
+    public func bool(for dictionary: [String: Any], keys: [String]) -> Bool {
         guard keys.count >= 1 else {
             fatalError("Error Reading Config Dictionary")
         }
@@ -90,12 +90,12 @@ public class VariantPlistReader: NSObject {
         return self.bool(for: subDictionary, keys: slicedKeys)
     }
 
-    func number(for keys: [String]) throws -> NSNumber {
-        try loadPlistIfNeeded()
+    public func number(for keys: [String]) -> NSNumber {
+        loadPlistIfNeeded()
         return number(for: self.plist, keys: keys)
     }
 
-    func number(for dictionary: [String: Any], keys: [String]) -> NSNumber {
+    public func number(for dictionary: [String: Any], keys: [String]) -> NSNumber {
         guard keys.count >= 1 else {
             fatalError("Error Reading Config Dictionary")
         }
@@ -115,8 +115,8 @@ public class VariantPlistReader: NSObject {
         return self.number(for: subDictionary, keys: slicedKeys)
     }
 
-    func stringArray(for keys: [String]) throws -> [String] {
-        try loadPlistIfNeeded()
+    func stringArray(for keys: [String]) -> [String] {
+        loadPlistIfNeeded()
         return stringArray(for: self.plist, keys: keys)
     }
 
