@@ -32,8 +32,6 @@ extension XcodeSurgery {
                 let key = try VariantEncryption().generateRandomEncryptionKey()
                 try VariantEncryption.FileManager().saveKeyToFile(key: key, toPath: outputFile)
                 
-//                let readKey = try VariantEncryption.FileManager().readKey(filePath: outputFile)
-//                try encryptionTest(encryptionKey: key, decryptionKey: readKey)
                 print("--- End of Keygen Execution")
             }
             catch {
@@ -42,21 +40,3 @@ extension XcodeSurgery {
         }
     }
 }
-/*
-extension XcodeSurgery.KeyGen {
-    
-    private func encryptionTest(encryptionKey: EncryptionKey,
-                        decryptionKey: EncryptionKey) throws {
-        let plainText = "heello world"
-        let plainTextData: Data! = plainText.data(using: .utf8)
-
-        let variantEncryption = VariantEncryption()
-        let encryptionResult = try variantEncryption.encrypt(plainText: plainTextData,
-                                                             key: encryptionKey)
-        let decryptedData = try variantEncryption.decrypt(result: encryptionResult,
-                                                          key: decryptionKey)
-        let decryptedText = String(data: decryptedData, encoding: .utf8)!
-        print("decryptedText: \(decryptedText)")
-    }
-}
-*/
