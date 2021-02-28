@@ -12,23 +12,29 @@ let package = Package(
     products: [
         .executable(name: "xcodesurgery", targets: ["XcodeSurgery-CLI"]),
         .library(name: "XcodeSurgeryKit", targets: ["XcodeSurgeryKit"]),
+        .library(name: "VariantEncryption", targets: ["VariantEncryption"]),
     ],
     dependencies: [
         .package(url: "https://github.com/apple/swift-argument-parser", from: "0.3.0"),
-        .package(url: "https://github.com/krzyzanowskim/CryptoSwift.git", .upToNextMinor(from: "1.3.8")),
-        .package(path: "Sources/VariantEncryption")
+        .package(url: "https://github.com/krzyzanowskim/CryptoSwift.git", .upToNextMinor(from: "1.3.8"))
     ],
     targets: [
         .target(
             name: "XcodeSurgery-CLI",
             dependencies: [
-                .product(name: "ArgumentParser", package: "swift-argument-parser"),
-                .product(name: "VariantEncryption", package: "VariantEncryption")
+                "VariantEncryption",
+                .product(name: "ArgumentParser", package: "swift-argument-parser")
             ]),
         .target(
             name: "XcodeSurgeryKit",
             dependencies: [
-                .product(name: "VariantEncryption", package: "VariantEncryption")
+                "VariantEncryption",
+                .product(name: "CryptoSwift", package: "CryptoSwift")
+            ]),
+        .target(
+            name: "VariantEncryption",
+            dependencies: [
+                .product(name: "CryptoSwift", package: "CryptoSwift")
             ]),
 //        .testTarget(
 //            name: "XcodeSurgeryTests",
