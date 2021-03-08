@@ -10,7 +10,7 @@ import ArgumentParser
 
 extension XcodeSurgery {
 
-    struct SourceGen: ParsableCommand {
+    struct SourceGen: ParsableCommand, VerboseCommand {
 
         @Option(name: [.customLong("plistFile"),
                        .customShort("p")],
@@ -26,8 +26,12 @@ extension XcodeSurgery {
                        .customShort("n")],
                 help: "Name of struct to access variant values")
         var structName: String
+        
+        @Flag var verbose = false
 
         func run() throws {
+            XcodeSurgery.setVerboseMode(self)
+            
             let sourceCodeWriter = SourceCodeWriter()
             let sourceCode = sourceCodeWriter.generatePlistReaderSourceCode(plistFile: plistFile,
                                                                             structName: structName)

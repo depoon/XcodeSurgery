@@ -12,7 +12,7 @@ protocol TransplantActionable {
 
 extension TransplantActionable {
     func cleanFolders() throws {
-        print("----- begin cleanFolders")
+        XcodeSurgery.log("----- begin cleanFolders")
         let fileManager = FileManager.default
         if fileManager.fileExists(atPath: self.pathOfWorkingFolder) {
             try fileManager.removeItem(atPath: self.pathOfWorkingFolder)
@@ -20,27 +20,27 @@ extension TransplantActionable {
     }
     
     func createWorkingFolder() throws {
-        print("----- begin createWorkingFolder")
+        XcodeSurgery.log("----- begin createWorkingFolder")
         let fileManager = FileManager.default
         try fileManager.copyItem(atPath: pathOfBaseTargetApp,
                              toPath: pathOfWorkingFolder)
     }
     
     func removeFiles() throws {
-        print("----- begin removeFiles")
+        XcodeSurgery.log("----- begin removeFiles")
         let filesToRemove = self.transplantCommand.filesToRemove
-        print("filesToRemove: \(filesToRemove)")
+        XcodeSurgery.log("filesToRemove: \(filesToRemove)")
         let fileManager = FileManager.default
         try fileManager.removeItem(atPath: "\(self.pathOfWorkingFolder)/Info.plist")
         for fileToRemove in filesToRemove {
             let pathOfFileToRemove = "\(pathOfWorkingFolder)/\(fileToRemove)"
-            print("-- attempt to remove : \(pathOfFileToRemove)")
+            XcodeSurgery.log("-- attempt to remove : \(pathOfFileToRemove)")
             try fileManager.removeItem(atPath: pathOfFileToRemove)
         }
     }
     
     func copyFilesToWorkingFolder() throws {
-        print("----- begin copyFilesToWorkingFolder")
+        XcodeSurgery.log("----- begin copyFilesToWorkingFolder")
         let filesToInject = self.transplantCommand.filesToInject
         let fileManager = FileManager.default
         try fileManager.copyItem(atPath: "\(self.pathOfProductApp)/Info.plist",
@@ -57,7 +57,7 @@ extension TransplantActionable {
     }
 
     func renameBinary() throws {
-        print("----- begin renameBinary")
+        XcodeSurgery.log("----- begin renameBinary")
         let baseTargetBinary = "\(self.pathOfWorkingFolder)/\(self.transplantCommand.sourceTarget)"
         let targetBinary = "\(self.pathOfWorkingFolder)/\(self.transplantCommand.destinationTarget)"
         
@@ -70,7 +70,7 @@ extension TransplantActionable {
     }
     
     func removeSignature() throws {
-        print("----- begin removeSignature")
+        XcodeSurgery.log("----- begin removeSignature")
         let embeddedProvisioning = "\(self.pathOfWorkingFolder)/embedded.mobileprovision"
         let codeSignature = "\(self.pathOfWorkingFolder)/_CodeSignature"
         let pkgInfo = "\(self.pathOfWorkingFolder)/PkgInfo"
@@ -97,7 +97,7 @@ extension TransplantActionable {
     }
     
     func replaceApp() throws {
-        print("----- begin replaceApp")
+        XcodeSurgery.log("----- begin replaceApp")
         let fileManager = FileManager.default
         if fileManager.fileExists(atPath: self.pathOfProductApp) {
             try fileManager.removeItem(atPath: self.pathOfProductApp)
@@ -107,15 +107,15 @@ extension TransplantActionable {
     }
     
     func patchDsym() throws {
-        print("----- begin PatchDsym")
+        XcodeSurgery.log("----- begin PatchDsym")
         let dsymPatchingAction = DsymPatchingAction(transplantCommand: self.transplantCommand)
         try dsymPatchingAction.executeDsymPatch()
-        print("----- end PatchDsym")
+        XcodeSurgery.log("----- end PatchDsym")
     }
 
     func execute() throws {
         do {
-            print("--- Start of \(self) Execution")
+            XcodeSurgery.log("--- Start of \(self) Execution")
             try self.cleanFolders()
             try self.createWorkingFolder()
             try self.removeFiles()
@@ -124,10 +124,10 @@ extension TransplantActionable {
             try self.removeSignature()
             try self.replaceApp()
             try self.patchDsym()
-            print("--- End of \(self) Execution")
+            XcodeSurgery.log("--- End of \(self) Execution")
         }
         catch {
-            print("--- Moved failed with error: \(error.localizedDescription)")
+            XcodeSurgery.log("--- Moved failed with error: \(error.localizedDescription)")
         }
     }
 }

@@ -39,12 +39,12 @@ extension XcodeSurgery {
 
         func run() throws {
             do {
-                print("--- Start of Encryption Execution")
+                XcodeSurgery.log("--- Start of Encryption Execution")
                 
                 let variantEncryptionFileManager = VariantEncryption.FileManager()
 
                 let encryptionKey = try variantEncryptionFileManager.readKey(filePath: keyFile)
-                let target = try self.createTarget()
+                let target = try Encryption.createTargetData(targetFilePath: targetFile)
                 let encryptionResult = try VariantEncryption().encrypt(plainText: target,
                                                                        key: encryptionKey)
                 try variantEncryptionFileManager.saveIvToFile(iv: encryptionResult.iv,
@@ -52,15 +52,15 @@ extension XcodeSurgery {
 
                 try variantEncryptionFileManager.saveCipertextToFile(ciphertext: encryptionResult.ciphertext,
                                                                      toPath: encryptedOutputFile)
-                print("--- End of Encryption Execution")
+                XcodeSurgery.log("--- End of Encryption Execution")
             }
             catch {
-                print("--- Keygen failed with error: \(error.localizedDescription)")
+                XcodeSurgery.log("--- Keygen failed with error: \(error.localizedDescription)")
             }
         }
         
-        func createTarget() throws -> Data {
-            let targetURL = URL(fileURLWithPath: targetFile)
+        static func createTargetData(targetFilePath: String) throws -> Data {
+            let targetURL = URL(fileURLWithPath: targetFilePath)
             let target = try Data(contentsOf: targetURL)
             return target
         }

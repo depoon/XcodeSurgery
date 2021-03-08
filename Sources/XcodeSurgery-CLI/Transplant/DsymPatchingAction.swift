@@ -16,7 +16,7 @@ class DsymPatchingAction {
     }
     
     func validateComments() throws {
-        printDebug("------- begin validateComments")
+        XcodeSurgery.log("------- begin validateComments")
         guard let formatArgument = self.transplantCommand.debugInformationFormat else {
             return
         }
@@ -24,7 +24,7 @@ class DsymPatchingAction {
             throw NSError(domain: "Invalid Debug Information Format value", code: 0, userInfo: nil)
         }
         guard format == .dwarfWithDsym else {
-            printDebug("Skip Patching Dsym for: \(formatArgument)")
+            XcodeSurgery.log("Skip Patching Dsym for: \(formatArgument)")
             return
         }
         let destinationDsym = "\(self.transplantCommand.targetBuildDirectory)/\(self.transplantCommand.destinationTarget).app.dSYM"
@@ -36,7 +36,7 @@ class DsymPatchingAction {
     }
     
     func createWorkingDsymFolder() throws {
-        printDebug("------- begin createWorkingDsymFolder")
+        XcodeSurgery.log("------- begin createWorkingDsymFolder")
         let sourceDsym = "\(self.transplantCommand.workingDirectory)/\(self.transplantCommand.sourceTarget).app.dSYM"
         let workingDsym = "\(self.transplantCommand.workingDirectory)/\(self.transplantCommand.sourceTarget).app.dSYM_Backup"
         
@@ -49,7 +49,7 @@ class DsymPatchingAction {
     }
     
     func deleteCurrentDestinationDwarf() throws {
-        printDebug("------- begin deleteCurrentDestinationDwarf")
+        XcodeSurgery.log("------- begin deleteCurrentDestinationDwarf")
         let destinationDwarf = "\(self.transplantCommand.targetBuildDirectory)/\(self.transplantCommand.destinationTarget).app.dSYM/Contents/Resources/DWARF/\(self.transplantCommand.destinationTarget)"
         let fileManager = FileManager.default
         if fileManager.fileExists(atPath: destinationDwarf) {
@@ -60,14 +60,14 @@ class DsymPatchingAction {
     }
     
     func replaceDestinationDwarf() throws {
-        printDebug("------- begin replaceDestinationDwarf")
+        XcodeSurgery.log("------- begin replaceDestinationDwarf")
         let sourceDwarf = "\(self.transplantCommand.workingDirectory)/\(self.transplantCommand.sourceTarget).app.dSYM_Backup/Contents/Resources/DWARF/\(self.transplantCommand.sourceTarget)"
         let destinationDwarf = "\(self.transplantCommand.targetBuildDirectory)/\(self.transplantCommand.destinationTarget).app.dSYM/Contents/Resources/DWARF/\(self.transplantCommand.destinationTarget)"
         let fileManager = FileManager.default
         try fileManager.copyItem(atPath: sourceDwarf,
                                  toPath: destinationDwarf)
         
-        printDebug("------- end replaceDestinationDwarf")
+        XcodeSurgery.log("------- end replaceDestinationDwarf")
     }
     
     func executeDsymPatch() throws {

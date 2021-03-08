@@ -8,7 +8,7 @@ extension XcodeSurgery {
         case install
     }
     
-    struct Transplant: ParsableCommand {
+    struct Transplant: ParsableCommand, VerboseCommand {
         @Option(name: [.customShort("a"),
                        .customLong("action")],
                 help: "Xcode Action. ${ACTION} eg \"build\", \"install\"",
@@ -53,9 +53,13 @@ extension XcodeSurgery {
                 help: "Debug Information Format eg. ${DEBUG_INFORMATION_FORMAT}")
         var debugInformationFormat: String?
         
+        @Flag var verbose = false
+        
         func run() throws {
-            printDebug("filesToRemove: \(filesToRemove)")
-            printDebug("filesToInject: \(filesToInject)")
+            XcodeSurgery.setVerboseMode(self)
+            
+            XcodeSurgery.log("filesToRemove: \(filesToRemove)")
+            XcodeSurgery.log("filesToInject: \(filesToInject)")
             let actionable = try self.createTransplantActionable()
             try actionable.execute()
         }
