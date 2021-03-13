@@ -11,31 +11,32 @@ import VariantEncryption
 
 extension XcodeSurgery {
 
-    struct KeyGen: ParsableCommand {
+    struct KeyGen: ParsableCommand, VerboseCommand {
 
         @Option(name: [.customLong("outputFile"),
                        .customShort("o")],
                 help: "Output file")
         var outputFile: String
+        
+        @Flag var verbose = false
 
         private lazy var variantEncryption: VariantEncryption = {
             return VariantEncryption()
         }()
 
         func run() throws {
-            let url = URL(fileURLWithPath: outputFile)
-            print("url: \(url)")
+            XcodeSurgery.setVerboseMode(self)
 
             do {
-                print("--- Start of Keygen Execution")
+                XcodeSurgery.log("--- Start of Keygen Execution")
 
                 let key = try VariantEncryption().generateRandomEncryptionKey()
                 try VariantEncryption.FileManager().saveKeyToFile(key: key, toPath: outputFile)
                 
-                print("--- End of Keygen Execution")
+                XcodeSurgery.log("--- End of Keygen Execution")
             }
             catch {
-                print("--- Keygen failed with error: \(error.localizedDescription)")
+                XcodeSurgery.log("--- Keygen failed with error: \(error.localizedDescription)")
             }
         }
     }

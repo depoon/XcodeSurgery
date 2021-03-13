@@ -10,7 +10,7 @@ import ArgumentParser
 
 extension XcodeSurgery {
     
-    struct Prepare: ParsableCommand {
+    struct Prepare: ParsableCommand, VerboseCommand {
         
         @Option(name: [.customLong("targetBuildDirectory"),
                        .customLong("tbd")],
@@ -27,7 +27,10 @@ extension XcodeSurgery {
                 help: "Destination Target Name eg. ${TARGETNAME}")
         var targetName: String
         
+        @Flag var verbose = false
+        
         func run() throws {
+            XcodeSurgery.setVerboseMode(self)
             try clearDirectory()
             try createDirectory()
             try copyAppToWorkingDirectory()
@@ -63,7 +66,7 @@ extension XcodeSurgery {
                 try fileManager.copyItem(atPath: sourceDsym,
                                          toPath: destinationDsym)
             } else {
-                printDebug("No Dsym to copy")
+                XcodeSurgery.log("No Dsym to copy")
             }
         }
     }
