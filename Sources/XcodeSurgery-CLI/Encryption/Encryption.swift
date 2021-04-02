@@ -44,7 +44,7 @@ extension XcodeSurgery {
                 let variantEncryptionFileManager = VariantEncryption.FileManager()
 
                 let encryptionKey = try variantEncryptionFileManager.readKey(filePath: keyFile)
-                let target = try Encryption.createTargetData(targetFilePath: targetFile)
+                let target = try XcodeSurgery.createTargetData(targetFilePath: targetFile)
                 let encryptionResult = try VariantEncryption().encrypt(plainText: target,
                                                                        key: encryptionKey)
                 try variantEncryptionFileManager.saveIvToFile(iv: encryptionResult.iv,
@@ -57,12 +57,6 @@ extension XcodeSurgery {
             catch {
                 XcodeSurgery.log("--- Keygen failed with error: \(error.localizedDescription)")
             }
-        }
-        
-        static func createTargetData(targetFilePath: String) throws -> Data {
-            let targetURL = URL(fileURLWithPath: targetFilePath)
-            let target = try Data(contentsOf: targetURL)
-            return target
-        }
+        }        
     }
 }

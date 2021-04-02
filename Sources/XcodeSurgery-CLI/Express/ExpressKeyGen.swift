@@ -22,27 +22,15 @@ extension XcodeSurgery.Express {
                 XcodeSurgery.setVerboseMode(self)
                 XcodeSurgery.log("--- Start of Express Keygen Execution")
                 try XcodeSurgery.checkIfXcodeprojExistsInCurrentDirectory()
-                try createXcodeSurgeryHiddenDirectoryIfNeeded()
+                try XcodeSurgery.createXcodeSurgeryHiddenDirectoryIfNeeded()
                 try deleteExistingEncryptionKeyIfExists()
-                try createEncryptionKey()
+                
+                try createEncryptionPassword()
 
                 XcodeSurgery.log("--- End of Express Keygen Execution")
             }
             catch {
                 XcodeSurgery.log("--- Express Keygen failed with error: \(error.localizedDescription)")
-            }
-        }
-
-        func createXcodeSurgeryHiddenDirectoryIfNeeded() throws {
-            let fileManager = FileManager.default
-            let artifactsDirectoryPath = XcodeSurgery.hiddenDirectoryPath(projectDirectoryPath: fileManager.currentDirectoryPath)
-
-            var isDir:ObjCBool = true
-            
-            if !fileManager.fileExists(atPath: artifactsDirectoryPath, isDirectory: &isDir) {
-
-                let directoryURL = URL(fileURLWithPath: artifactsDirectoryPath)
-                try fileManager.createDirectory(at: directoryURL, withIntermediateDirectories: true)
             }
         }
 
@@ -54,25 +42,23 @@ extension XcodeSurgery.Express {
             }
         }
 
-        func createEncryptionKey() throws {
-            let fileManager = FileManager.default
-            let hiddenArtifactsDirectoryPath = XcodeSurgery.hiddenArtifactsDirectoryPath(projectDirectoryPath: fileManager.currentDirectoryPath)
-            try self.createDirectoryIfNeeded(directoryPath: hiddenArtifactsDirectoryPath)
-            
-            let encryptionKeyFilePath = XcodeSurgery.Express.encryptionKeyFilePath
-            let key = try VariantEncryption().generateRandomEncryptionKey()
-            try VariantEncryption.FileManager().saveKeyToFile(key: key,
-                                                              toPath: encryptionKeyFilePath)
+        func createEncryptionPassword() throws {
+            let password = Password.generateRandomPassword()
+            try password.savePasswordToFile()
         }
+    }
+}
+
+private extension Password {
+    func savePasswordToFile() throws {
+        try XcodeSurgery.createSecretsDirectoryIfNeeded()
         
-        func createDirectoryIfNeeded(directoryPath: String) throws {
-            var isDir:ObjCBool = true
-            
-            let fileManager = FileManager.default
-            if !fileManager.fileExists(atPath: directoryPath, isDirectory: &isDir) {
-                let directoryURL = URL(fileURLWithPath: directoryPath)
-                try fileManager.createDirectory(at: directoryURL, withIntermediateDirectories: true)
-            }
-        }
+        try VariantEncryption.FileManager()
+            .saveSecretStringToFile(string: self.password,
+                                    toPath: XcodeSurgery.Express.encryptionPasswordFilePath)
+        try VariantEncryption.FileManager()
+            .saveSecretStringToFile(string: self.salt,
+                                    toPath: XcodeSurgery.Express.encryptionPasswordSaltFilePath)
+        
     }
 }
