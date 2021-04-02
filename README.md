@@ -7,14 +7,7 @@ XcodeSurgery is a swift XCode build phase CLI tool for copying compiled binaries
 ## The downside with using `xcconfig` or `preprocessor macros` to manage build variants
 Building different build variants using configuration will trigger recompilation as the build processes do not share common `$(TARGET_BUILD_DIR)`. Changing preprocessor macro values will trigger dependency graph reanalysis and recompilation of codes. Ideally there should not be recompilation if there's no change in the logic of the source codes.
 
-## Solution: Create a placeholder target and swap binaries.
-XcodeSurgery aims to eliminate unnecessary recompilation of source codes when building different flavours or variants of an iOS app target.
-
-## Build Time Savings
-![Copy Build Settings](docs/images/BuildTimeSavings.png)
-
 ## Installing XCodeSurgery
-
 
 XcodeSurgery is available through Mint 🌱.
 ```sh
@@ -26,9 +19,53 @@ Mint can be installed via Homebrew
 brew install mint
 ```
 
+## Using XcodeSurgery Express
+
+#### Add XcodeSurgery Package to your project. 
+![Image of XcodeSurgery](docs/images/AddXcodeSurgeryPackageChooseVersion.png)
+
+Select `VariantEncryption` and `XcodeSurgeryKit` products and add them to your application target.
+![Image of XcodeSurgery](docs/images/AddXcodeSurgeryPackageSelectTarget.png)
+
+### Building Variants using same target
+![Image of XcodeSurgery](docs/images/SettingUpVariantsSameTarget_v1.png)
+
+#### 1. Create variant feature plist files. 
+Don't worry, we will encrypt the files before using them in our application.
+
+#### 2. Generate encryption key
+```sh
+xcodesurgery express keygen
+```
+This will create a hidden `.xcodesurgery/secret` folder in the root project folder and generate random password and salt file for use in the encrypt/decrypt process.
+![Image of XcodeSurgery](docs/images/SecretsFolder.png)
+
+#### 3. Create separate XCSchemes for building and running each variant.
+
+#### 4. Add the generated files into your project.
+
+
+
+
+
+
+
+## Solution: Create a placeholder target and swap binaries.
+XcodeSurgery aims to eliminate unnecessary recompilation of source codes when building different flavours or variants of an iOS app target.
+
+## Build Time Savings
+![Copy Build Settings](docs/images/BuildTimeSavings.png)
+
+
+
+
+
+
+
 ## 4 Simple Steps to Setup XcodeSurgery in your Project
 1. Create a new app target. We will refer this as the `Destination Target` and the original target as the `Source Target`
 ![Copy Build Settings](docs/images/CreateNewTarget.gif)
+
 Do note that you do not need to clone the `Source Target`
 
 2. Copy Build Settings of `Source Target` over to `Destination Target`.
