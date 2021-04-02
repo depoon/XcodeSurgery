@@ -7,6 +7,7 @@
 
 import Foundation
 import ArgumentParser
+import VariantEncryption
 
 extension XcodeSurgery {
 
@@ -24,6 +25,21 @@ extension XcodeSurgery {
             let filePath = "\(hiddenArtifactsDirectoryPath)/encryption-key"
             return filePath
         }
+        
+        static var encryptionPasswordFilePath: String {
+            let fileManager = FileManager.default
+            let hiddenSecretsDirectoryPath = XcodeSurgery.hiddenSecretsDirectoryPath(projectDirectoryPath: fileManager.currentDirectoryPath)
+            let filePath = "\(hiddenSecretsDirectoryPath)/\(VariantEncryption.passwordFileName)"
+            return filePath
+        }
+        
+        static var encryptionPasswordSaltFilePath: String {
+            let fileManager = FileManager.default
+            let hiddenSecretsDirectoryPath = XcodeSurgery.hiddenSecretsDirectoryPath(projectDirectoryPath: fileManager.currentDirectoryPath)
+            let filePath = "\(hiddenSecretsDirectoryPath)/\(VariantEncryption.passwordSaltFileName)"
+            return filePath
+        }
+
         
         static var ivOutputFile: String {
             let fileManager = FileManager.default

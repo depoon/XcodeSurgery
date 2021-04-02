@@ -53,6 +53,10 @@ extension XcodeSurgery {
     static func hiddenArtifactsDirectoryPath(projectDirectoryPath: String) -> String {
         return "\(XcodeSurgery.hiddenDirectoryPath(projectDirectoryPath: projectDirectoryPath))/artifacts"
     }
+
+    static func hiddenSecretsDirectoryPath(projectDirectoryPath: String) -> String {
+        return "\(XcodeSurgery.hiddenDirectoryPath(projectDirectoryPath: projectDirectoryPath))/secrets"
+    }
     
     static func checkIfXcodeprojExistsInCurrentDirectory() throws {
         let fileManager = FileManager.default
@@ -74,6 +78,48 @@ extension XcodeSurgery {
         if !fileManager.fileExists(atPath: hiddenDirectoryPath, isDirectory: &isDir) {
             throw NSError(domain: "Unable to locate '.xcodesurgery' folder in current directory", code: 0, userInfo: nil)
         }
+    }
+    
+    static func createXcodeSurgeryHiddenDirectoryIfNeeded() throws {
+        let fileManager = FileManager.default
+        let artifactsDirectoryPath = XcodeSurgery.hiddenDirectoryPath(projectDirectoryPath: fileManager.currentDirectoryPath)
+
+        var isDir:ObjCBool = true
+        
+        if !fileManager.fileExists(atPath: artifactsDirectoryPath, isDirectory: &isDir) {
+
+            let directoryURL = URL(fileURLWithPath: artifactsDirectoryPath)
+            try fileManager.createDirectory(at: directoryURL, withIntermediateDirectories: true)
+        }
+    }
+    
+    static func createArtifactsDirectoryIfNeeded() throws {
+        let fileManager = FileManager.default
+        let hiddenArtifactsDirectoryPath = XcodeSurgery.hiddenArtifactsDirectoryPath(projectDirectoryPath: fileManager.currentDirectoryPath)
+        try XcodeSurgery.createDirectoryIfNeeded(directoryPath: hiddenArtifactsDirectoryPath)
+    }
+    
+    static func createSecretsDirectoryIfNeeded() throws {
+        let fileManager = FileManager.default
+        let hiddenSecretsDirectoryPath = XcodeSurgery.hiddenSecretsDirectoryPath(projectDirectoryPath: fileManager.currentDirectoryPath)
+        try XcodeSurgery.createDirectoryIfNeeded(directoryPath: hiddenSecretsDirectoryPath)
+    }
+
+    
+    static func createDirectoryIfNeeded(directoryPath: String) throws {
+        var isDir:ObjCBool = true
+        
+        let fileManager = FileManager.default
+        if !fileManager.fileExists(atPath: directoryPath, isDirectory: &isDir) {
+            let directoryURL = URL(fileURLWithPath: directoryPath)
+            try fileManager.createDirectory(at: directoryURL, withIntermediateDirectories: true)
+        }
+    }
+    
+    static func createTargetData(targetFilePath: String) throws -> Data {
+        let targetURL = URL(fileURLWithPath: targetFilePath)
+        let target = try Data(contentsOf: targetURL)
+        return target
     }
 }
 
