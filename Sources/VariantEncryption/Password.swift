@@ -15,7 +15,7 @@ public struct Password {
         self.password = password
         self.salt = salt
     }
-    
+
     public static func generateRandomPassword() -> Password {
         let passwordString = Password.generateRandomPasswordString()
         let saltString = Password.generateRandomPasswordSaltString()
@@ -37,12 +37,12 @@ private extension Password {
     private static var characters: String {
         return "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
     }
-    
+
     private static func generateRandomPasswordString() -> String {
         let passwordString = Password.generateRandomString(of: 1000)
         return passwordString
     }
-    
+
     private static func generateRandomPasswordSaltString() -> String {
         let passwordSaltString = Password.generateRandomString(of: 100)
         return passwordSaltString

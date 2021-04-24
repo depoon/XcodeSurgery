@@ -17,17 +17,17 @@ extension XcodeSurgery {
                        .customShort("k")],
                 help: "Key file path")
         var keyFile: String
-        
+
         @Option(name: [.customLong("targetFile"),
                        .customShort("t")],
                 help: "Target input file path")
         var targetFile: String
-        
+
         @Option(name: [.customLong("ivOutputFile"),
                        .customShort("i")],
                 help: "IV output file path")
         var ivOutputFile: String
-        
+
         @Option(name: [.customLong("encryptedOutputFile"),
                        .customShort("o")],
                 help: "Encrypted output file path")
@@ -40,7 +40,7 @@ extension XcodeSurgery {
         func run() throws {
             do {
                 XcodeSurgery.log("--- Start of Encryption Execution")
-                
+
                 let variantEncryptionFileManager = VariantEncryption.FileManager()
 
                 let encryptionKey = try variantEncryptionFileManager.readKey(filePath: keyFile)
