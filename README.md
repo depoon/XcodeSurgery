@@ -22,16 +22,17 @@ brew install mint
 ## Using XcodeSurgery Express
 
 #### Add XcodeSurgery Package to your project. 
-![Image of XcodeSurgery](docs/images/AddXcodeSurgeryPackageChooseVersion.png)
+![Add Swift Package to your project](docs/images/AddXcodeSurgeryPackageChooseVersion.png)
 
 Select `VariantEncryption` and `XcodeSurgeryKit` products and add them to your application target.
-![Image of XcodeSurgery](docs/images/AddXcodeSurgeryPackageSelectTarget.png)
+![Select Dependencies](docs/images/AddXcodeSurgeryPackageSelectTarget.png)
 
 ### Building Variants using same target
-![Image of XcodeSurgery](docs/images/SettingUpVariantsSameTarget_v1.png)
+![Building Variants using same target](docs/images/SettingUpVariantsSameTarget_v1.png)
 
 #### 1. Create variant feature plist files. 
 Don't worry, we will encrypt the files before using them in our application.
+![Image of XcodeSurgery](docs/images/CreatePlistScheme.png)
 
 #### 2. Generate encryption key
 ```sh
