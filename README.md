@@ -31,8 +31,13 @@ Select `VariantEncryption` and `XcodeSurgeryKit` products and add them to your a
 ![Building Variants using same target](docs/images/SettingUpVariantsSameTarget_v1.png)
 
 #### 1. Create variant feature plist files. 
-Don't worry, we will encrypt the files before using them in our application.
-![Image of XcodeSurgery](docs/images/CreatePlistScheme.png)
+
+![Image of XcodeSurgery](docs/images/CreatePlistSchemecreate.png)
+
+* Create a plist file to hold the variant values. 
+* Duplicate the plist file and amend the variant values required.
+
+
 
 #### 2. Generate encryption key
 ```sh
