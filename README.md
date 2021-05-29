@@ -47,11 +47,13 @@ This will create a hidden `.xcodesurgery/secret` folder in the root project fold
 
 #### 3. Create separate XCSchemes for building and running each variant.
 
-	- 1. Create and use separate XCSchemes to build each variant.
-	2. Add the following code in the Build `Pre-actions` script.
-	3. Remember to choose the correct variant plist file to become the `WorkingCopy.plist` in the `${PROJECT_DIR}/WorkingDirectory` folder.
-	4. You may choose to apply any further amendments to the WorkingCopy.plist by using the `PlistBuddy` command.
+- 1. Create and use separate XCSchemes to build each variant.
+- 2. Add the following code in the Build `Pre-actions` script.
+- 3. Remember to choose the correct variant plist file to become the `WorkingCopy.plist` in the `${PROJECT_DIR}/WorkingDirectory` folder.
+- 4. You may choose to apply any further amendments to the WorkingCopy.plist by using the `PlistBuddy` command.
 ![Image of Scheme Pre Build Script Example](docs/images/SchemePreBuildScriptExample.png)
+
+Copy this code into the Build `Pre-actions` script of your XCScheme
 ```sh
 rm -rf ${PROJECT_DIR}/WorkingDirectory
 mkdir ${PROJECT_DIR}/WorkingDirectory
@@ -63,7 +65,7 @@ cp ${PROJECT_DIR}/VariantFeature/Dev_env.plist  ${PROJECT_DIR}/WorkingDirectory/
 cd ${PROJECT_DIR}
 xcodesurgery express encrypt --targetPlist ${PROJECT_DIR}/WorkingDirectory/WorkingCopy.plist --structName MyPlistReader
 ```
-	4. The `express encrypt` command will use the generated password and salt files to encrypt the WorkingCopy.plist and create artifacts in the `.xcodesurgery/artifacts` folder.
+- 5. The `express encrypt` command will use the generated password and salt files to encrypt the WorkingCopy.plist and create artifacts in the `.xcodesurgery/artifacts` folder.
 
 ![Image of Encrypt Artifacts](docs/images/EncryptArtifacts.png)
 
