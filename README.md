@@ -41,13 +41,13 @@ This will create a hidden `.xcodesurgery/secret` folder in the root project fold
 
 ![Image of Creating Plist Variant Files](docs/images/CreatePlistScheme.png)
 
-	1. Create a plist file to hold the variant values. 
-	2. Duplicate the plist file (Dev/Staging) and amend the variant values required.
+- 1. Create a plist file to hold the variant values. 
+- 2. Duplicate the plist file (Dev/Staging) and amend the variant values required.
 
 
 #### 3. Create separate XCSchemes for building and running each variant.
 
-	1. Create and use separate XCSchemes to build each variant.
+	- 1. Create and use separate XCSchemes to build each variant.
 	2. Add the following code in the Build `Pre-actions` script.
 	3. Remember to choose the correct variant plist file to become the `WorkingCopy.plist` in the `${PROJECT_DIR}/WorkingDirectory` folder.
 	4. You may choose to apply any further amendments to the WorkingCopy.plist by using the `PlistBuddy` command.
