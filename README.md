@@ -27,17 +27,17 @@ brew install mint
 Select `VariantEncryption` and `XcodeSurgeryKit` products and add them to your application target.
 ![Select Dependencies](docs/images/AddXcodeSurgeryPackageSelectTarget.png)
 
-### Building Variants using same target
+#### Building Variants using same target
 ![Building Variants using same target](docs/images/SettingUpVariantsSameTarget_v1.png)
 
-#### 1. Generate encryption key
+### 1. Generate encryption key
 ```sh
 xcodesurgery express keygen
 ```
 This will create a hidden `.xcodesurgery/secret` folder in the root project folder and generate random password and salt file for use in the encrypt/decrypt process.
 ![Image of XcodeSurgery](docs/images/SecretsFolder.png)
 
-#### 2. Create variant feature plist files. 
+### 2. Create variant feature plist files. 
 
 ![Image of Creating Plist Variant Files](docs/images/CreatePlistScheme.png)
 
@@ -45,7 +45,7 @@ This will create a hidden `.xcodesurgery/secret` folder in the root project fold
 - 2. Duplicate the plist file (Dev/Staging) and amend the variant values required.
 
 
-#### 3. Create separate XCSchemes for building and running each variant.
+### 3. Create separate XCSchemes for building and running each variant.
 
 - 1. Create and use separate XCSchemes to build each variant.
 - 2. Add the following code in the Build `Pre-actions` script.
@@ -69,7 +69,7 @@ xcodesurgery express encrypt --targetPlist ${PROJECT_DIR}/WorkingDirectory/Worki
 
 ![Image of Encrypt Artifacts](docs/images/EncryptArtifacts.png)
 
-#### 4. Add the generated files into your project.
+### 4. Add the generated files into your project.
 
 
 
