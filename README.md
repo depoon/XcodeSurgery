@@ -30,19 +30,20 @@ Select `VariantEncryption` and `XcodeSurgeryKit` products and add them to your a
 ### Building Variants using same target
 ![Building Variants using same target](docs/images/SettingUpVariantsSameTarget_v1.png)
 
-#### 1. Create variant feature plist files. 
+#### 1. Generate encryption key
+```sh
+xcodesurgery express keygen
+```
+This command will generate a random password in a hidden `.xcodesurgery` folder in your project.
+
+#### 2. Create variant feature plist files. 
 
 ![Image of XcodeSurgery](docs/images/CreatePlistScheme.png)
 
 	1. Create a plist file to hold the variant values. 
-	2. Duplicate the plist file and amend the variant values required.
+	2. Duplicate the plist file (Dev/Staging) and amend the variant values required.
+	3. Create a temporary working directory in your project folder eg `${PROJECT_DIR}/WorkingDirectory`
 
-
-
-#### 2. Generate encryption key
-```sh
-xcodesurgery express keygen
-```
 This will create a hidden `.xcodesurgery/secret` folder in the root project folder and generate random password and salt file for use in the encrypt/decrypt process.
 ![Image of XcodeSurgery](docs/images/SecretsFolder.png)
 
