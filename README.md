@@ -32,10 +32,10 @@ Select `VariantEncryption` and `XcodeSurgeryKit` products and add them to your a
 
 #### 1. Create variant feature plist files. 
 
-![Image of XcodeSurgery](docs/images/CreatePlistSchemecreate.png)
+![Image of XcodeSurgery](docs/images/CreatePlistScheme.png)
 
-* Create a plist file to hold the variant values. 
-* Duplicate the plist file and amend the variant values required.
+	1. Create a plist file to hold the variant values. 
+	2. Duplicate the plist file and amend the variant values required.
 
 
 
