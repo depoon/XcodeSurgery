@@ -34,20 +34,38 @@ Select `VariantEncryption` and `XcodeSurgeryKit` products and add them to your a
 ```sh
 xcodesurgery express keygen
 ```
-This command will generate a random password in a hidden `.xcodesurgery` folder in your project.
-
-#### 2. Create variant feature plist files. 
-
-![Image of XcodeSurgery](docs/images/CreatePlistScheme.png)
-
-	1. Create a plist file to hold the variant values. 
-	2. Duplicate the plist file (Dev/Staging) and amend the variant values required.
-	3. Create a temporary working directory in your project folder eg `${PROJECT_DIR}/WorkingDirectory`
-
 This will create a hidden `.xcodesurgery/secret` folder in the root project folder and generate random password and salt file for use in the encrypt/decrypt process.
 ![Image of XcodeSurgery](docs/images/SecretsFolder.png)
 
+#### 2. Create variant feature plist files. 
+
+![Image of Creating Plist Variant Files](docs/images/CreatePlistScheme.png)
+
+	1. Create a plist file to hold the variant values. 
+	2. Duplicate the plist file (Dev/Staging) and amend the variant values required.
+
+
 #### 3. Create separate XCSchemes for building and running each variant.
+
+	1. Create and use separate XCSchemes to build each variant.
+	2. Add the following code in the Build `Pre-actions` script.
+	3. Remember to choose the correct variant plist file to become the `WorkingCopy.plist` in the `${PROJECT_DIR}/WorkingDirectory` folder.
+	4. You may choose to apply any further amendments to the WorkingCopy.plist by using the `PlistBuddy` command.
+![Image of Scheme Pre Build Script Example](docs/images/SchemePreBuildScriptExample.png)
+```sh
+rm -rf ${PROJECT_DIR}/WorkingDirectory
+mkdir ${PROJECT_DIR}/WorkingDirectory
+
+cp ${PROJECT_DIR}/VariantFeature/Dev_env.plist  ${PROJECT_DIR}/WorkingDirectory/WorkingCopy.plist
+
+/usr/libexec/PlistBuddy -c "Set enable_debug_console YES" ${PROJECT_DIR}/WorkingDirectory/WorkingCopy.plist
+
+cd ${PROJECT_DIR}
+xcodesurgery express encrypt --targetPlist ${PROJECT_DIR}/WorkingDirectory/WorkingCopy.plist --structName MyPlistReader
+```
+	4. The `express encrypt` command will use the generated password and salt files to encrypt the WorkingCopy.plist and create artifacts in the `.xcodesurgery/artifacts` folder.
+
+![Image of Encrypt Artifacts](docs/images/EncryptArtifacts.png)
 
 #### 4. Add the generated files into your project.
 
