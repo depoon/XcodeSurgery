@@ -126,7 +126,7 @@ class TransplantIphoneosArchive: TransplantActionable {
     
     var pathOfBaseTargetApp: String {
         let folder = self.transplantCommand.workingDirectory
-        return "\(folder)/\(self.transplantCommand.destinationTarget).app"
+        return "\(folder)/\(self.transplantCommand.sourceTarget).app"
     }
     
     var pathOfProductApp: String {
