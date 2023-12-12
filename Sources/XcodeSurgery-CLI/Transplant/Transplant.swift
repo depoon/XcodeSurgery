@@ -40,13 +40,18 @@ extension XcodeSurgery {
         
         @Option(name: .customLong("filesToRemove"),
                 parsing: .upToNextOption,
-                help: "Files to remove (separated by spaces)")
+                help: "Files to remove (separated by comma)")
         var filesToRemove: [String] = []
         
         @Option(name: .customLong("filesToInject"),
                 parsing: .upToNextOption,
                 help: "Files to inject (separated by spaces)")
         var filesToInject: [String] = []
+
+        @Option(name: .customLong("foldersToPatch"),
+                help: "Folder to patch over with (separated by comma)")
+        var foldersToPatch: [String] = []
+
         
         @Option(name: [.customLong("debugInformationFormat"),
                        .customLong("dif")],
