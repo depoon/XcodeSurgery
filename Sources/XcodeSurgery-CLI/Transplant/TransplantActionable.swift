@@ -28,7 +28,8 @@ extension TransplantActionable {
     
     func removeFiles() throws {
         XcodeSurgery.log("----- begin removeFiles")
-        let filesToRemove = self.transplantCommand.filesToRemove
+        let filesToRemoveBeforeSplit = self.transplantCommand.filesToRemove.joined(separator: ",")
+        let filesToRemove = filesToRemoveBeforeSplit.split(separator: ",")
         XcodeSurgery.log("filesToRemove: \(filesToRemove)")
         let fileManager = FileManager.default
         try fileManager.removeItem(atPath: "\(self.pathOfWorkingFolder)/Info.plist")
@@ -53,6 +54,29 @@ extension TransplantActionable {
             let destination = "\(pathOfWorkingFolder)/\(file)"
             try fileManager.copyItem(atPath: fileToInject,
                                      toPath: destination)
+        }
+
+        let foldersToPatch = self.transplantCommand.foldersToPatch
+        let workingDirectory = self.transplantCommand.workingDirectory
+        for folderToPatch in foldersToPatch {
+
+            guard let folderToPatchURL = URL(string: folderToPatch) else {
+                throw NSError(domain: "Invalid file url: \(folderToPatch)", code: 0, userInfo: nil)
+            }
+            let folderName = folderToPatchURL.lastPathComponent
+            let destination = "\(pathOfWorkingFolder)/\(folderName)"
+
+            XcodeSurgery.log("------- workingDirectory: \(workingDirectory)")
+            XcodeSurgery.log("------- pathOfWorkingFolder: \(pathOfWorkingFolder)")
+            XcodeSurgery.log("------- folderToPatch: \(folderToPatch)")
+            XcodeSurgery.log("------- destination: \(destination)")
+
+            guard let destinationURL = URL(string: destination) else {
+                throw NSError(domain: "Invalid file url: \(destination)", code: 0, userInfo: nil)
+            }
+            try _ = fileManager.replaceItemAt(destinationURL, withItemAt: folderToPatchURL, options: [.usingNewMetadataOnly])
+
+            XcodeSurgery.log("------- [ok]folderToPatch OK")
         }
     }
 
